@@ -13,16 +13,21 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+
+// Routes
 app.use('/api/v1/jobs', authenticate, jobRoutes)
 app.use('/api/v1/auth', authRoutes)
+
+// Middlewares
 app.use(notFound)
 app.use(errorHandler)
 
 const start = async () => {
   try {
-    // ✅ Changed this line to match .env file
     await connectDB(process.env.MONGO_URL)
-    app.listen(3000, () => console.log('Server started...'))
+    app.listen(process.env.PORT || 3000, () =>
+      console.log(`Server started on port ${process.env.PORT || 3000}...`)
+    )
   } catch (err) {
     console.log(err)
   }
